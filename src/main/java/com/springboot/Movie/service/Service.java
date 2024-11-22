@@ -29,6 +29,6 @@ public interface Service {
     //movie details
     public MovieDetails getMovieDetails(int movieId);
     public List<MovieDetails> getMovieDetailsBasedOnRating(int rating);
-
+    public List<Movie> getMovieofActorbasedOnRating(int actorId,int rating);
 
 }

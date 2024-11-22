@@ -1,12 +1,10 @@
 package com.springboot.Movie.rest;
 
+import com.springboot.Movie.entity.Movie;
 import com.springboot.Movie.entity.MovieDetails;
 import com.springboot.Movie.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,7 +32,10 @@ public class RestControllerMovieDetails {
         return service.getMovieDetailsBasedOnRating(rating);
     }
 
-
-
+    //get the list of movie details of a particular actor whose rating is greater than particular rating
+    @GetMapping("/movie-details/actor/{actorId}")
+    public List<Movie> getMovieofActorbasedOnRating(@PathVariable int actorId, @RequestParam(required = false,defaultValue = "0") int rating){
+        return service.getMovieofActorbasedOnRating(actorId,rating);
+    }
 
 }

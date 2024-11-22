@@ -7,6 +7,8 @@ import com.springboot.Movie.entity.Actor;
 import com.springboot.Movie.entity.Director;
 import com.springboot.Movie.entity.Movie;
 import com.springboot.Movie.entity.MovieDetails;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -18,11 +20,13 @@ public class ServiceImp implements Service{
     ActorDAO actorDAO;
     DirectorDAO directorDAO;
     MovieDAO movieDAO;
+    EntityManager entityManager;
 
-    ServiceImp(ActorDAO actorDAO,DirectorDAO directorDAO,MovieDAO movieDAO){
+    ServiceImp(ActorDAO actorDAO,DirectorDAO directorDAO,MovieDAO movieDAO,EntityManager entityManager){
         this.actorDAO=actorDAO;
         this.movieDAO=movieDAO;
         this.directorDAO=directorDAO;
+        this.entityManager=entityManager;
     }
 
     @Override
@@ -119,6 +123,11 @@ public class ServiceImp implements Service{
             throw new InputMismatchException("rating cannot be greater than 5");
         }
 
+        if(rating<0) {
+            throw new InputMismatchException("rating cannot be lesser than 0");
+        }
+
+
         List<Movie> list = movieDAO.findAll();
         List<MovieDetails> movieDetails = new ArrayList<>();
         for(Movie movieEle : list ) {
@@ -137,5 +146,22 @@ public class ServiceImp implements Service{
             }
         }
         return movieDetails;
+    }
+
+    @Override
+    public List<Movie> getMovieofActorbasedOnRating(int actorId, int rating) {
+
+        if(rating>5) {
+            throw new InputMismatchException("rating cannot be greater than 5");
+        }
+
+        if(rating<0) {
+            throw new InputMismatchException("rating cannot be lesser than 0");
+        }
+
+        TypedQuery<Movie> result = entityManager.createQuery("From Movie Where actorId=:thedata1 and rating>=:thedata2",Movie.class);
+        result.setParameter("thedata1",actorId);
+        result.setParameter("thedata2",rating);
+        return result.getResultList();
     }
 }
