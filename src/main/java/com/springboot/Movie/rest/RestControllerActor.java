@@ -31,7 +31,7 @@ public class RestControllerActor {
         return service.saveActor(actor);
     }
 
-    @GetMapping("actor")
+    @GetMapping("/actor")
     public List<Actor> fetchActors() {
         return service.findAllActors();
     }
